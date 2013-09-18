@@ -1,0 +1,6 @@
+Revision history for Perl extension Module::Build::Prereq.
+
+0.01  Wed Sep 18 12:17:23 2013
+	- original version; created by h2xs 1.23 with options
+		-AX -b 5.10.0 Module::Build::Prereq
+

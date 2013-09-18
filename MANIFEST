@@ -1,0 +1,6 @@
+Changes
+Makefile.PL
+MANIFEST
+README.md
+t/Module-Build-Prereq.t
+lib/Module/Build/Prereq.pm
