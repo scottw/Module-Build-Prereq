@@ -4,7 +4,7 @@ Module-Build-Prereq
 Perl module to naïvely analyze your module dependencies and then make
 sure they're properly listed in your Makefile.PL.
 
-INSTALLATION
+## INSTALLATION ##
 
 To install this module type the following:
 
@@ -13,9 +13,24 @@ To install this module type the following:
     make test
     make install
 
-USAGE
+## USAGE ##
+
+Use in your `Makefile.PL`:
+
+    use Module::Build::Prereq;
+
+    my %prereq_pm = (Foo => '1.2',
+                     Bar => '2.2a');
 
     assert_modules(\%prereq_pm);
+
+    WriteMakefile(PREREQ_PM => \%prereq_pm, ...);
+
+`assert_modules` should not be added to any `Makefile.PL` which is
+part of a publicly available module (unless you want your module users
+to have another needless dependency); it is meant to help a) during
+development of any module and b) any time you need to ensure you
+deploy with the correct dependencies.
 
 COPYRIGHT AND LICENCE
 
