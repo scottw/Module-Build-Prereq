@@ -10,7 +10,7 @@ require Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(assert_modules);
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub assert_modules {
     my %args = @_;
@@ -28,6 +28,7 @@ sub assert_modules {
                 while( my $module = <$fh> ) {
                     next unless $module =~ s/^use (\S+).*;.*/$1/;
                     chomp $module;
+                    next if $module =~ /^\d/; # version pragma
                     next if exists $args{prereq_pm}->{$module};
                     next if defined $skips and $module =~ $skips;
 
@@ -41,7 +42,7 @@ sub assert_modules {
     delete @modules{@core};
 
     if (scalar keys %modules) {
-        my @missing = map { "  $_ (used by $modules{$_}" } sort keys %modules;
+        my @missing = map { "  $_ (used by $modules{$_})" } sort keys %modules;
         die "Missing modules:\n" . join("\n", @missing) . "\n";
     }
 
@@ -53,21 +54,27 @@ __END__
 
 =head1 NAME
 
-Module::Build::Prereq - Verify your Makefile.PL has all the modules you use()
+Module::Build::Prereq - Verify your Build.PL/Makefile.PL has all the modules you use()
 
 =head1 SYNOPSIS
 
   use Module::Build::Prereq;
 
-  WriteMakefile(...);
+  assert_modules(\%prereq_pm);
+
+  WriteMakefile(CONFIGURE_REQUIRES => {
+                  'Module::Build::Prereq' => '0.01' },
+                PREREQ_PM => \%prereq_pm);
+
+  # or Module::Build->new(requires => \%prereq_pm)->create_build_script;
 
 =head1 DESCRIPTION
 
 B<Module::Build::Prereq> helps you as a developer make sure you've
-captured all of your dependencies correctly in your
-F<Makefile.PL>. This module is meant to be used during development or
-for non-public modules that need to guarantee modules are installed
-during deployment.
+captured all of your dependencies correctly in your F<Makefile.PL> or
+F<Build.PL>. This module is meant to be used during development or for
+non-public modules that need to guarantee modules are installed during
+deployment.
 
 B<Module::Build::Prereq> naïvely crawls through your source files
 (F<*.pm> by default) looking for 'use ...' statements. It then
@@ -77,12 +84,13 @@ it to ignore, skips any modules already in the I<PREREQ_PM> hashref,
 then warns you about the rest.
 
 What then? Ideally you'd include those modules in your
-F<Makefile.PL>'s I<PREREQ_PM> list or add them to the
-I<ignore_modules> pattern.
+F<Makefile.PL>'s I<PREREQ_PM> list (or F<Build.PL>'s I<requires> list)
+or add them to the I<ignore_modules> pattern in B<assert_modules> for
+the next run.
 
 For more thorough and careful dependency checks (including CPAN
-lookups) see BDFOY's B<Module::Release::Prereq> and other related
-modules.
+lookups) see BDFOY's B<Module::Release::Prereq>, RJBS's
+B<Perl::PrereqScanner>, and other related modules.
 
 =head2 assert_modules
 
@@ -156,7 +164,9 @@ from happening.
 
 B<Test::Prereq> (BDFOY) for a more thorough way to do this in your
 module tests rather than at F<Makefile.PL>. B<Module::Release::Prereq>
-is also by BDFOY and far more throrough than this module.
+is also by BDFOY and far more throrough than this
+module. B<Perl::PrereqScanner> (RJBS) is a mature scanner
+implementation as well.
 
 =head1 AUTHOR
 
