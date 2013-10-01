@@ -10,7 +10,7 @@ require Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(assert_modules);
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 sub assert_modules {
     my %args = @_;
@@ -52,6 +52,8 @@ sub assert_modules {
 1;
 __END__
 
+=encoding utf8
+
 =head1 NAME
 
 Module::Build::Prereq - Verify your Build.PL/Makefile.PL has all the modules you use()
@@ -79,7 +81,7 @@ deployment.
 B<Module::Build::Prereq> naïvely crawls through your source files
 (F<*.pm> by default) looking for 'use ...' statements. It then
 subtracts any module that is part of Perl's core module list (as
-determined by B<Module::CoreList), subtracts any modules you've told
+determined by B<Module::CoreList>), subtracts any modules you've told
 it to ignore, skips any modules already in the I<PREREQ_PM> hashref,
 then warns you about the rest.
 
@@ -89,8 +91,8 @@ or add them to the I<ignore_modules> pattern in B<assert_modules> for
 the next run.
 
 For more thorough and careful dependency checks (including CPAN
-lookups) see BDFOY's B<Module::Release::Prereq>, RJBS's
-B<Perl::PrereqScanner>, and other related modules.
+lookups) see BDFOY's L<Module::Release::Prereq>, RJBS's
+L<Perl::PrereqScanner>, and other related modules.
 
 =head2 assert_modules
 
@@ -162,10 +164,10 @@ from happening.
 
 =head1 SEE ALSO
 
-B<Test::Prereq> (BDFOY) for a more thorough way to do this in your
-module tests rather than at F<Makefile.PL>. B<Module::Release::Prereq>
+L<Test::Prereq> (BDFOY) for a more thorough way to do this in your
+module tests rather than at F<Makefile.PL>. L<Module::Release::Prereq>
 is also by BDFOY and far more throrough than this
-module. B<Perl::PrereqScanner> (RJBS) is a mature scanner
+module. L<Perl::PrereqScanner> (RJBS) is a mature scanner
 implementation as well.
 
 =head1 AUTHOR
