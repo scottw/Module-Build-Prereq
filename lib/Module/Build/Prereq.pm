@@ -10,7 +10,7 @@ require Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(assert_modules);
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 sub assert_modules {
     my %args = @_;
